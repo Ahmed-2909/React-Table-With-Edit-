@@ -1,7 +1,8 @@
 import React, { useMemo, useState } from 'react'
-import { useTable, usePagination } from 'react-table'
+import { useTable, usePagination, useGlobalFilter, useFilters } from 'react-table'
 import MOCK_DATA from './MOCK_DATA.json'
 import { COLUMNS } from './columns'
+import { GlobalFilter } from './GlobalFilter'
 import './style.css'
 
 const PaginationTable = () => {
@@ -39,7 +40,7 @@ const PaginationTable = () => {
         // console.log(id);
     }
     const saveHandler = () => {
-        console.log(inputValue);
+        // console.log(inputValue);
         const i = MockData.findIndex(x => x.id === +id + 1)
         // console.log(i);
         const allData = [...MockData]
@@ -69,19 +70,24 @@ const PaginationTable = () => {
         gotoPage,
         pageCount,
         prepareRow,
+        setGlobalFilter,
     } = useTable(
         {
             columns,
             data,
         },
-        usePagination
+
+        useFilters,
+        useGlobalFilter, usePagination,
     )
     const { pageIndex } = state
+    const { globalFilter } = state
 
     // console.log(inputValue);
 
     return (
         <>
+            <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
             <table {...getTableProps()}>
                 <thead>
                     {headerGroups.map((headerGroup) => (
